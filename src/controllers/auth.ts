@@ -1,12 +1,12 @@
 import userModel from '../database/models/user'
 import jwt from 'jsonwebtoken'
-import { ReqRegisterDto } from '../dtos'
+import { ReqLoginDto, ReqRegisterDto } from '../dtos'
 import { Request, Response } from 'express'
 import { Model } from 'mongoose'
 import { IUser } from '../database/schemas/interface'
 
 //@desc Register User
-//@route POST /user/register
+//@route POST /auth/register
 //@access Public
 export const register = async (req: Request, res: Response) => {
   console.log('Register user')
@@ -21,6 +21,43 @@ export const register = async (req: Request, res: Response) => {
       tel,
       role,
     })
+
+    sendTokenResponse(user, 200, res)
+  } catch (err) {
+    res.status(400).json({ success: false })
+    console.log(err)
+  }
+}
+
+//@desc  Login user
+//@route POST /auth/login
+//@access Public
+export const login = async (req: Request, res: Response) => {
+  console.log('User login')
+  try {
+    const reqBody: ReqLoginDto = req.body
+    const { username, password } = reqBody
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        msg: 'Please provide an username and password',
+      })
+    }
+
+    const user = await userModel.findOne({ username }).select('+password')
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, msg: 'Invalid credentials' })
+    }
+
+    const isMatch = await user.matchPassword(password)
+
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, msg: 'Invalid credentials' })
+    }
 
     sendTokenResponse(user, 200, res)
   } catch (err) {

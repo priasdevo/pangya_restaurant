@@ -5,3 +5,8 @@ export interface ReqRegisterDto {
   role: string
   tel: string
 }
+
+export interface ReqLoginDto {
+  username: string
+  password: string
+}
