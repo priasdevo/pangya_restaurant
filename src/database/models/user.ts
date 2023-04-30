@@ -31,6 +31,7 @@ const userSchema = new Schema<IUser>(
     },
     tel: {
       type: String,
+      required: [true, 'Pleas add an telephone number'],
     },
   },
   {
