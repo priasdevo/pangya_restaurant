@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose'
+import { Schema, Document } from 'mongoose'
 
-export interface IUser {
+export interface IUser extends Document {
   _id: Schema.Types.ObjectId
   username: string
   password: string
@@ -13,14 +13,14 @@ export interface IUser {
   matchPassword: (enteredPassword: string) => Promise<boolean>
 }
 
-export interface IReservation {
+export interface IReservation extends Document {
   _id: Schema.Types.ObjectId
   userId: Schema.Types.ObjectId
   restaurantId: Schema.Types.ObjectId
   date: Date
 }
 
-export interface IRestaurant {
+export interface IRestaurant extends Document {
   _id: Schema.Types.ObjectId
   name: string
   address: string
