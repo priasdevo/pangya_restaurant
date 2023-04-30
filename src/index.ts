@@ -1,8 +1,11 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import cookieParser from 'cookie-parser'
+import connectDB from './config/db'
 
 dotenv.config({ path: './config/.env' })
+connectDB()
+
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
