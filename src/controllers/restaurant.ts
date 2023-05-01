@@ -89,9 +89,15 @@ export const getRestaurants = async (req: Request, res: Response) => {
 // @access Private
 export const updateRestaurant = async (req: Request, res: Response) => {
   try {
+    const reqBody = req.body
+    const { name, address, tel, open_time, close_time } = reqBody
+
+    const openTime = convertStringTimeToDate(open_time)
+    const closeTime = convertStringTimeToDate(close_time)
+
     const restaurant = await RestaurantModel.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { name, address, tel, open_time: openTime, close_time: closeTime },
       {
         new: true,
         runValidators: true,
