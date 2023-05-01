@@ -10,12 +10,13 @@ dotenv.config({ path: path.resolve(__dirname, './config/.env') })
 connectDB()
 
 import auth from './routes/auth'
-
+import restaurant from './routes/restaurant'
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
 app.use('/auth/', auth)
+app.use('/restaurant/', restaurant)
 
 const PORT = process.env.PORT || 5000
 const server = app.listen(PORT, () => {
