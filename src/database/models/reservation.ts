@@ -13,6 +13,11 @@ const reservationSchema = new Schema<IReservation>(
       ref: 'restaurants',
       required: true,
     },
+    status: {
+      type: String,
+      enum: ['pending', 'complete', 'cancelled'],
+      default: 'pending',
+    },
     date: {
       type: Date,
       required: true,

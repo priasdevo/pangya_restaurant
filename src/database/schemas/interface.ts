@@ -18,6 +18,7 @@ export interface IReservation extends Document {
   userId: Schema.Types.ObjectId
   restaurantId: Schema.Types.ObjectId
   date: Date
+  status: string
 }
 
 export interface IRestaurant extends Document {

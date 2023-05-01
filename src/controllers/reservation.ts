@@ -11,12 +11,13 @@ export const createReservation = async (req: Request, res: Response) => {
     // Check if the user has already 3 reservations
     const existingReservations = await ReservationModel.find({
       userId,
+      status: 'pending',
     }).countDocuments()
 
     if (existingReservations >= 3) {
       return res.status(400).json({
         success: false,
-        message: 'User can only have up to 3 reservations',
+        message: 'User can only have up to 3 pending reservations',
       })
     }
 

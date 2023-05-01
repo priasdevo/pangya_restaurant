@@ -81,6 +81,15 @@ export const checkReservationOwnership = async (
       reservation.userId.toString() === req.user?.id ||
       req.user?.role === 'admin'
     ) {
+      if (
+        reservation.status === 'complete' ||
+        reservation.status === 'cancelled'
+      ) {
+        return res.status(403).json({
+          success: false,
+          msg: 'Complete or cancelled reservations cannot be edited',
+        })
+      }
       next()
     } else {
       return res.status(401).json({
