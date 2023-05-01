@@ -66,6 +66,23 @@ export const login = async (req: Request, res: Response) => {
   }
 }
 
+//@desc Logout user
+//@route GET /auth/logout
+//@access Private
+export const logout = async (req: Request, res: Response) => {
+  console.log('User logout')
+
+  // Clear the JWT token cookie by setting the expiration date in the past
+  const options = {
+    expires: new Date(Date.now() - 10 * 1000),
+    httpOnly: true,
+  }
+  res.status(200).cookie('token', '', options).json({
+    success: true,
+    msg: 'User logged out',
+  })
+}
+
 //Get token from model, create cookie and send response
 const sendTokenResponse = (user: IUser, statusCode: number, res: Response) => {
   const token = user.getSignedJwtToken()
