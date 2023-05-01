@@ -25,7 +25,6 @@ export const protect = async (
   ) {
     token = req.headers.authorization.split(' ')[1]
   }
-
   //make sure token exist
   if (!token) {
     return res

@@ -6,9 +6,23 @@ import RestaurantModel from '../database/models/restaurant'
 // @access Private
 export const createRestaurant = async (req: Request, res: Response) => {
   try {
-    const restaurant = await RestaurantModel.create(req.body)
+    const reqBody = req.body
+    const { name, address, tel, open_time, close_time } = reqBody
+
+    const openTime = convertStringTimeToDate(open_time)
+    const closeTime = convertStringTimeToDate(close_time)
+
+    const restaurant = await RestaurantModel.create({
+      name,
+      address,
+      tel,
+      open_time: openTime,
+      close_time: closeTime,
+    })
+
     res.status(201).json({ success: true, data: restaurant })
   } catch (error) {
+    console.log(error)
     res.status(400).json({ success: false, error })
   }
 }
@@ -113,4 +127,10 @@ export const deleteRestaurant = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({ success: false, error })
   }
+}
+
+function convertStringTimeToDate(timeString: any) {
+  const [hours, minutes] = timeString.split('.')
+  const dateWithTime = new Date(1970, 0, 1, parseInt(hours), parseInt(minutes))
+  return dateWithTime
 }

@@ -1,10 +1,7 @@
 import userModel from '../database/models/user'
-import jwt from 'jsonwebtoken'
 import { ReqLoginDto, ReqRegisterDto } from '../dtos'
 import { Request, Response } from 'express'
-import { Model } from 'mongoose'
 import { IUser } from '../database/schemas/interface'
-
 //@desc Register User
 //@route POST /auth/register
 //@access Public
@@ -70,17 +67,13 @@ export const login = async (req: Request, res: Response) => {
 //@route GET /auth/logout
 //@access Private
 export const logout = async (req: Request, res: Response) => {
-  console.log('User logout')
-
-  // Clear the JWT token cookie by setting the expiration date in the past
-  const options = {
-    expires: new Date(Date.now() - 10 * 1000),
-    httpOnly: true,
+  const token = req.cookies.token
+  if (token) {
+    // Add the token to the blacklist
+    // Clear the cookie
+    res.clearCookie('token')
   }
-  res.status(200).cookie('token', '', options).json({
-    success: true,
-    msg: 'User logged out',
-  })
+  res.status(200).json({ success: true, msg: 'Logged out successfully' })
 }
 
 //Get token from model, create cookie and send response

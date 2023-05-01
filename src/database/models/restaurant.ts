@@ -6,6 +6,7 @@ const restaurantSchema = new Schema<IRestaurant>(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     address: {
       type: String,
@@ -29,6 +30,8 @@ const restaurantSchema = new Schema<IRestaurant>(
     collection: 'Restaurants',
   },
 )
+
+// Helper function to convert string time to Date object
 
 const Restaurant = model<IRestaurant>('restaurants', restaurantSchema)
 
