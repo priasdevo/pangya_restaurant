@@ -6,7 +6,7 @@ import ReservationModel from '../database/models/reservation'
 // @access Public
 export const createReservation = async (req: Request, res: Response) => {
   try {
-    const userId = req.body.userId
+    const userId = req.user?.id
 
     // Check if the user has already 3 reservations
     const existingReservations = await ReservationModel.find({
@@ -20,7 +20,8 @@ export const createReservation = async (req: Request, res: Response) => {
       })
     }
 
-    const reservation = await ReservationModel.create(req.body)
+    const reservationData = { ...req.body, userId }
+    const reservation = await ReservationModel.create(reservationData)
     res.status(201).json({ success: true, data: reservation })
   } catch (error) {
     res.status(400).json({ success: false, error })
@@ -32,7 +33,10 @@ export const createReservation = async (req: Request, res: Response) => {
 // @access Public
 export const getAllReservations = async (req: Request, res: Response) => {
   try {
-    const reservations = await ReservationModel.find()
+    const userId = req.user?.id
+
+    const reservations = await ReservationModel.find({ userId })
+
     res.status(200).json({ success: true, data: reservations })
   } catch (error) {
     res.status(400).json({ success: false, error })

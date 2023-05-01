@@ -11,11 +11,13 @@ import { authorize, protect } from '../middleware/auth'
 
 const router = express.Router()
 
-router.route('/').get(protect, getRestaurants)
+router
+  .route('/')
+  .get(protect, getRestaurants)
+  .post(protect, authorize('admin'), createRestaurant)
 router
   .route('/:id')
   .get(protect, getRestaurant)
-  .post(protect, authorize('admin'), createRestaurant)
   .put(protect, authorize('admin'), updateRestaurant)
   .delete(protect, authorize('admin'), deleteRestaurant)
 

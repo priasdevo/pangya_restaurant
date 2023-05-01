@@ -1,5 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import user from '../database/models/user'
+import ReservationModel from '../database/models/reservation'
 import { NextFunction, Request, Response } from 'express'
 import { IUser } from '../database/schemas/interface'
 
@@ -59,5 +60,30 @@ export const authorize = (...roles: string[]) => {
       })
     }
     next()
+  }
+}
+
+export const checkReservationOwnership = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const reservation = await ReservationModel.findById(req.params.id)
+    if (!reservation) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Reservation not found' })
+    }
+
+    if (req.user?.id !== reservation.userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'You do not have permission to perform this action',
+      })
+    }
+    next()
+  } catch (error) {
+    res.status(500).json({ success: false, error })
   }
 }
