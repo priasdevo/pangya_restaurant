@@ -11,12 +11,15 @@ connectDB()
 
 import auth from './routes/auth'
 import restaurant from './routes/restaurant'
+import reservation from './routes/reservation'
+
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
 app.use('/auth/', auth)
 app.use('/restaurant/', restaurant)
+app.use('/reservation/', reservation)
 
 const PORT = process.env.PORT || 5000
 const server = app.listen(PORT, () => {
