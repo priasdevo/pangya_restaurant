@@ -34,8 +34,15 @@ export const createReservation = async (req: Request, res: Response) => {
 export const getAllReservations = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id
+    const role = req.user?.role
 
-    const reservations = await ReservationModel.find({ userId })
+    let reservations
+
+    if (role === 'admin') {
+      reservations = await ReservationModel.find()
+    } else {
+      reservations = await ReservationModel.find({ userId })
+    }
 
     res.status(200).json({ success: true, data: reservations })
   } catch (error) {

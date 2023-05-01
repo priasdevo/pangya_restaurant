@@ -70,20 +70,26 @@ export const checkReservationOwnership = async (
 ) => {
   try {
     const reservation = await ReservationModel.findById(req.params.id)
+
     if (!reservation) {
       return res
         .status(404)
-        .json({ success: false, message: 'Reservation not found' })
+        .json({ success: false, msg: 'Reservation not found' })
     }
 
-    if (req.user?.id !== reservation.userId.toString()) {
-      return res.status(403).json({
+    // If the user is the owner of the reservation or has an admin role, proceed
+    if (
+      reservation.userId.toString() === req.user?.id ||
+      req.user?.role === 'admin'
+    ) {
+      next()
+    } else {
+      return res.status(401).json({
         success: false,
-        message: 'You do not have permission to perform this action',
+        msg: 'User not authorized to access this reservation',
       })
     }
-    next()
   } catch (error) {
-    res.status(500).json({ success: false, error })
+    res.status(400).json({ success: false, error })
   }
 }
