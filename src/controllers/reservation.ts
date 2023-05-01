@@ -6,6 +6,20 @@ import ReservationModel from '../database/models/reservation'
 // @access Public
 export const createReservation = async (req: Request, res: Response) => {
   try {
+    const userId = req.body.userId
+
+    // Check if the user has already 3 reservations
+    const existingReservations = await ReservationModel.find({
+      userId,
+    }).countDocuments()
+
+    if (existingReservations >= 3) {
+      return res.status(400).json({
+        success: false,
+        message: 'User can only have up to 3 reservations',
+      })
+    }
+
     const reservation = await ReservationModel.create(req.body)
     res.status(201).json({ success: true, data: reservation })
   } catch (error) {
