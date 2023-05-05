@@ -7,6 +7,6 @@ export interface ReqRegisterDto {
 }
 
 export interface ReqLoginDto {
-  username: string
+  email: string
   password: string
 }

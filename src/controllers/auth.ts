@@ -33,15 +33,15 @@ export const login = async (req: Request, res: Response) => {
   console.log('User login')
   try {
     const reqBody: ReqLoginDto = req.body
-    const { username, password } = reqBody
-    if (!username || !password) {
+    const { email, password } = reqBody
+    if (!email || !password) {
       return res.status(400).json({
         success: false,
-        msg: 'Please provide an username and password',
+        msg: 'Please provide an email and password',
       })
     }
 
-    const user = await userModel.findOne({ username }).select('+password')
+    const user = await userModel.findOne({ email }).select('+password')
     if (!user) {
       return res
         .status(400)
