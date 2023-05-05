@@ -1,4 +1,7 @@
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const connectDB = async () => {
   mongoose.set('strictQuery', true)
@@ -7,4 +10,4 @@ const connectDB = async () => {
   console.log(`MongoDB Connected: ${conn.connection.host}`)
 }
 
-module.exports = connectDB
+export default connectDB
