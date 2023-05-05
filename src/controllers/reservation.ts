@@ -112,3 +112,32 @@ export const deleteReservation = async (req: Request, res: Response) => {
     res.status(400).json({ success: false, error })
   }
 }
+
+export const getHistory = async (req: Request, res: Response) => {
+  try {
+    const requestedUserId = req.params.id
+
+    // If no userId is provided and the user is not an admin, set the userId to the user's own ID
+    const userId =
+      !requestedUserId && req.user?.role !== 'admin'
+        ? req.user?.id
+        : requestedUserId
+
+    // If user is not admin and the requested userId is not the user's id
+    if (req.user?.role !== 'admin' && req.user?.id !== userId) {
+      return res.status(401).json({
+        success: false,
+        msg: "You are not authorized to access other user's reservation history",
+      })
+    }
+
+    const reservations = await ReservationModel.find({ userId: userId })
+      .select(['date', 'status'])
+      .populate('userId', 'username')
+      .populate('restaurantId', 'name')
+
+    res.status(200).json({ success: true, data: reservations })
+  } catch (err) {
+    res.status(400).json({ success: false, error: err })
+  }
+}

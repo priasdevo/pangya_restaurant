@@ -5,6 +5,7 @@ import {
   getReservation,
   updateReservation,
   deleteReservation,
+  getHistory,
 } from '../controllers/reservation'
 import {
   authorize,
@@ -18,6 +19,8 @@ router
   .route('/')
   .get(protect, getAllReservations)
   .post(protect, createReservation)
+
+router.route('/history').get(protect, getHistory)
 
 router
   .route('/:id')
