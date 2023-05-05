@@ -21,6 +21,7 @@ router
   .post(protect, createReservation)
 
 router.route('/history').get(protect, getHistory)
+router.route('/history/:id').get(protect, getHistory)
 
 router
   .route('/:id')
